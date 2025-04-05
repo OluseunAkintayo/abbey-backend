@@ -25,6 +25,10 @@ class UserService implements IUSerService {
       }
     }
   }
+
+  async getUserProfile() {
+    
+  }
 }
 
 export default UserService;

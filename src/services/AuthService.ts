@@ -17,7 +17,8 @@ class AuthService implements IAuthService {
 
   async register(user: UserDtoProps): Promise<GenericResponseProps> {
     const existingUser = await this.users.findOne({
-      where: { email: user.email }
+      where: { email: user.email },
+      select: ["id", "email"]
     });
 
     if (existingUser) {
@@ -53,7 +54,8 @@ class AuthService implements IAuthService {
 
   async login(user: UserDtoProps): Promise<GenericResponseProps> {
     const userObject = await this.users.findOne({
-      where: { email: user.email }
+      where: { email: user.email },
+      select: ["id", "email"]
     });
 
     if (!userObject) {
@@ -80,6 +82,8 @@ class AuthService implements IAuthService {
         message: "There was an error signing in. Please try again after some time"
       }
     }
+
+    this.updateLastLogin(userObject.id);
 
     const response: GenericResponseProps = {
       data: {
