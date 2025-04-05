@@ -1,3 +1,7 @@
+export interface UserProps {
+
+}
+
 export interface UserDtoProps {
   email: string;
   passcode: string;
@@ -5,8 +9,8 @@ export interface UserDtoProps {
 
 export interface GenericResponseProps {
   success: boolean;
-  message: string;
-  data: any
+  message?: string;
+  data?: any
 }
 
 export interface IAuthService {

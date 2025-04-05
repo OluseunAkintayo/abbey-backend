@@ -7,7 +7,7 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import dotenv from 'dotenv';
-import { errorHandler } from './middlewares/error-handler';
+import { errorHandler } from './middleware/error-handler';
 dotenv.config();
 
 const app: Express = express();

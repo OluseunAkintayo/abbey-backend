@@ -2,12 +2,12 @@ import { AppDataSource } from "../config/database";
 import { User } from "../entities/User";
 import { GenericResponseProps, IUSerService } from "../lib/types";
 
-const users = AppDataSource.getRepository(User);
-
 class UserService implements IUSerService {
+  private users = AppDataSource.getRepository(User);
+
   async getUser(username: string): Promise<GenericResponseProps> {
     try {
-      const user = await users.findOne({
+      const user = await this.users.findOne({
         where: { email: username },
         select: ["id", "firstName", "lastName", "createdAt"]
       });

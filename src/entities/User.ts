@@ -14,7 +14,7 @@ export class User {
   @Column({ length: 100, nullable: true })
   lastName!: string;
 
-  @Column({ select: false })
+  @Column()
   passwordHash!: string;
   
   @Column({ type: 'timestamp', nullable: true })
