@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Follower } from '../lib/types';
 
 @Entity()
 export class User {
@@ -16,15 +17,24 @@ export class User {
 
   @Column()
   passwordHash!: string;
-  
+
+  @Column({ nullable: true })
+  picture!: string;
+
   @Column({ type: 'timestamp', nullable: true })
   lastLoginDate?: Date;
-  
+
   @Column({ default: true })
   isActive!: boolean;
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @Column('jsonb', { default: [] })
+  followers!: Follower[];
+
+  @Column('jsonb', { default: [] })
+  following!: Follower[];
 
   @UpdateDateColumn()
   updatedAt?: Date;

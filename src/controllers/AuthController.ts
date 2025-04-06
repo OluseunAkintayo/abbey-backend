@@ -4,40 +4,60 @@ import { UserDtoProps } from '../lib/types';
 import validate from '../lib/validate';
 import { userDtoSchema } from '../schema/user';
 
-const AuthController = Router();
-const authService = new AuthService();
+class AuthController {
+  private router: Router;
+  private authService: AuthService;
 
-AuthController.post("/register", validate(userDtoSchema), async (req: Request, res: Response) => {
-  const user: UserDtoProps = req.body;
-  try {
-    const response = await authService.register(user);
-    if(response.success) res.status(201).json(response);
-    res.status(400).json(response);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      data: error
-    });
+  constructor() {
+    this.router = Router();
+    this.authService = new AuthService();
+    this.initializeRoutes();
   }
-});
 
+  private initializeRoutes() {
+    this.router.post("/register", validate(userDtoSchema), this.register.bind(this));
+    this.router.post("/login", validate(userDtoSchema), this.login.bind(this));
+  }
 
-AuthController.post("/login", validate(userDtoSchema), async (req: Request, res: Response) => {
-  const user: UserDtoProps = req.body;
-  try {
-    const response = await authService.login(user);
-    if(response.success) {
-      res.status(200).json(response);
-      return;
+  private async register(req: Request, res: Response) {
+    const user: UserDtoProps = req.body;
+    try {
+      const response = await this.authService.register(user);
+      if (response.success) {
+        res.status(201).json(response);
+        return;
+      }
+      res.status(400).json(response);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        data: error
+      });
     }
-    res.status(400).json(response);
-  } catch (error) {
-    console.log(error)
-    res.status(500).json({
-      success: false,
-      data: error
-    });
   }
-});
 
-export default AuthController;
+  private async login(req: Request, res: Response) {
+    const user: UserDtoProps = req.body;
+    try {
+      const response = await this.authService.login(user);
+      if (response.success) {
+        res.status(200).json(response);
+        return;
+      }
+      res.status(400).json(response);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        success: false,
+        data: error
+      });
+    }
+  }
+
+  public getRouter() {
+    return this.router;
+  }
+}
+
+export default new AuthController().getRouter();

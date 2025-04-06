@@ -1,5 +1,10 @@
-export interface UserProps {
-
+export interface UserPofileUpdateProps {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  picture?: string;
+  isActive: boolean;
 }
 
 export interface UserDtoProps {
@@ -18,6 +23,21 @@ export interface IAuthService {
   login(user: UserDtoProps): Promise<GenericResponseProps>;
 }
 
+export interface IFollowerService {
+  followUser(selfId: string, userId: string): Promise<GenericResponseProps>;
+  unfollowUser(selfId: string, userId: string): Promise<GenericResponseProps>;
+  getFollowers(userId: string): Promise<GenericResponseProps>;
+  getFollowing(userId: string): Promise<GenericResponseProps>;
+}
+
 export interface IUSerService {
   getUser(username: string): Promise<GenericResponseProps>;
 }
+
+export interface Follower {
+  userId: string;
+  date: Date;
+}
+
+export interface Following extends Follower {}
+

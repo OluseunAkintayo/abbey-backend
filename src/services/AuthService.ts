@@ -55,7 +55,7 @@ class AuthService implements IAuthService {
   async login(user: UserDtoProps): Promise<GenericResponseProps> {
     const userObject = await this.users.findOne({
       where: { email: user.email },
-      select: ["id", "email"]
+      select: ["id", "email", "passwordHash", "lastLoginDate"]
     });
 
     if (!userObject) {
@@ -82,9 +82,9 @@ class AuthService implements IAuthService {
         message: "There was an error signing in. Please try again after some time"
       }
     }
-
-    this.updateLastLogin(userObject.id);
-
+    
+    await this.updateLastLogin(userObject.id);
+    
     const response: GenericResponseProps = {
       data: {
         user: {

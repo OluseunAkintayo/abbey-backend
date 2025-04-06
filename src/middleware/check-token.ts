@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { Request, RequestHandler } from 'express';
 import dayjs from 'dayjs';
-import { redis } from '../lib/redis';
 dotenv.config();
 
 export interface RequestExt extends Request {
@@ -26,7 +25,6 @@ export const check: RequestHandler = async (req, res, next) => {
     const token = authToken.split(' ')[1];
     try {
       const decodedToken = jwt.verify(token, jwtKey) as { id: string; email: string; exp: number; iat: number };
-      console.log({ decodedToken })
 
       if (dayjs.unix(decodedToken.exp).isAfter(dayjs())) {
         (req as RequestExt).user = decodedToken;
