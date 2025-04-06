@@ -7,13 +7,9 @@ export const userDtoSchema = yup.object().shape({
 
 
 export const userProfileUpdateSchema = yup.object({
-  id: yup.string()
-    .uuid('ID must be a valid UUID')
-    .required('ID is required'),
-
-  email: yup.string()
-    .email('Must be a valid email address')
-    .required('Email is required'),
+  // email: yup.string()
+  //   .email('Must be a valid email address')
+  //   .required('Email is required'),
 
   firstName: yup.string()
     .required('First name is required')

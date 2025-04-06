@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
 import { Follower } from '../lib/types';
 
 @Entity()
@@ -6,7 +6,7 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column({ length: 100, unique: true })
+  @Column({ length: 100, unique: true, nullable: false })
   email!: string;
 
   @Column({ length: 100, nullable: true })
@@ -15,8 +15,14 @@ export class User {
   @Column({ length: 100, nullable: true })
   lastName!: string;
 
+  @Column({ length: 100 })
+  username!: string;
+
   @Column()
   passwordHash!: string;
+
+  @Column({ nullable: true })
+  bio!: string;
 
   @Column({ nullable: true })
   picture!: string;

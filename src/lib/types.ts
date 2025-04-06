@@ -1,10 +1,10 @@
 export interface UserPofileUpdateProps {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   picture?: string;
-  isActive: boolean;
+  bio?: string;
+  isActive?: boolean;
+  username?: string;
 }
 
 export interface UserDtoProps {

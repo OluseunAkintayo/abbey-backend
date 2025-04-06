@@ -35,7 +35,7 @@ class UserService implements IUSerService {
     const id = decodeToken(token)?.id;
     const user = await this.users.findOne({
       where: { id },
-      select: ["id", "firstName", "lastName", "email", "isActive", "picture", "lastLoginDate"]
+      select: ["id", "firstName", "lastName", "email", "isActive", "picture", "username", "lastLoginDate"]
     });
     if (!user) {
       return {
@@ -52,7 +52,7 @@ class UserService implements IUSerService {
 
   async updateProfile(id: string, profile: UserPofileUpdateProps): Promise<GenericResponseProps> {
     const user = await this.users.findOne({ where: { id } });
-    if(!user) {
+    if (!user) {
       return {
         success: false,
         message: "User not found"
@@ -62,17 +62,25 @@ class UserService implements IUSerService {
     if (profile.firstName !== undefined) {
       user.firstName = profile.firstName;
     }
-    
+
     if (profile.lastName !== undefined) {
       user.lastName = profile.lastName;
     }
-    
+
+    if (profile.username !== undefined) {
+      user.username = profile.username;
+    }
+
+    if (profile.bio !== undefined) {
+      user.bio = profile.bio;
+    }
+
     if (profile.picture !== undefined) {
       user.picture = profile.picture;
     }
-    
+
     if (Boolean(profile.isActive)) {
-      user.isActive = profile.isActive;
+      user.isActive = Boolean(profile.isActive);
     }
 
     return {

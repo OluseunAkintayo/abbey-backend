@@ -35,12 +35,14 @@ class AuthService implements IAuthService {
     this.users.create({
       email: user.email,
       passwordHash: hash,
+      username: user.email.split('@')[1],
       isActive: true
     });
 
     await this.users.save({
       email: user.email,
       passwordHash: hash,
+      username: user.email.split('@')[0],
       isActive: true
     });
 
