@@ -35,7 +35,7 @@ class UserService implements IUSerService {
     const id = decodeToken(token)?.id;
     const user = await this.users.findOne({
       where: { id },
-      select: ["id", "firstName", "lastName", "email", "isActive", "picture", "username", "lastLoginDate"]
+      select: ["id", "firstName", "lastName", "email", "isActive", "picture", "bio", "username", "lastLoginDate"]
     });
     if (!user) {
       return {
@@ -82,6 +82,8 @@ class UserService implements IUSerService {
     if (Boolean(profile.isActive)) {
       user.isActive = Boolean(profile.isActive);
     }
+
+    this.users.save(user);
 
     return {
       success: true,

@@ -90,10 +90,19 @@ class FollowerService implements IFollowerService {
       message: "Unable to retrieve followers at this time"
     }
 
+    const followerPromises = followers.map(async (item) => {
+      return await this.users.findOne({
+        where: { id: item.userId },
+        select: ["email", "username", "picture"]
+      });
+    });
+
+    const followersData = await Promise.all(followerPromises);
+
     return {
       success: true,
       message: "Followers retrieved successfully",
-      data: followers
+      data: followersData.filter(Boolean)
     }
   }
 
@@ -104,10 +113,19 @@ class FollowerService implements IFollowerService {
       message: "Unable to retrieve data at this time"
     }
 
+    const followerPromises = following.map(async (item) => {
+      return await this.users.findOne({
+        where: { id: item.userId },
+        select: ["email", "username", "picture"]
+      });
+    });
+
+    const followingData = await Promise.all(followerPromises);
+
     return {
       success: true,
       message: "Data retrieved successfully",
-      data: following
+      data: followingData.filter(Boolean)
     }
   }
 }
