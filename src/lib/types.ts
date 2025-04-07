@@ -24,10 +24,10 @@ export interface IAuthService {
 }
 
 export interface IFollowerService {
-  followUser(selfId: string, userId: string): Promise<GenericResponseProps>;
-  unfollowUser(selfId: string, userId: string): Promise<GenericResponseProps>;
-  getFollowers(userId: string): Promise<GenericResponseProps>;
-  getFollowing(userId: string): Promise<GenericResponseProps>;
+  followUser(selfId: number, userId: number): Promise<GenericResponseProps>;
+  unfollowUser(selfId: number, userId: number): Promise<GenericResponseProps>;
+  getFollowers(userId: number): Promise<GenericResponseProps>;
+  getFollowing(userId: number): Promise<GenericResponseProps>;
 }
 
 export interface IUSerService {
@@ -35,9 +35,8 @@ export interface IUSerService {
 }
 
 export interface Follower {
-  userId: string;
+  userId: number;
   date: Date;
 }
 
 export interface Following extends Follower {}
-

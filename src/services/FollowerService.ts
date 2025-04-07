@@ -5,7 +5,7 @@ import { Follower, Following, GenericResponseProps, IFollowerService } from "../
 class FollowerService implements IFollowerService {
   private users = AppDataSource.getRepository(User);
 
-  async followUser(selfId: string, userId: string): Promise<GenericResponseProps> {
+  async followUser(selfId: number, userId: number): Promise<GenericResponseProps> {
     const user = await this.users.findOne({
       where: { id: userId }
     });
@@ -56,7 +56,7 @@ class FollowerService implements IFollowerService {
     }
   }
 
-  async unfollowUser(selfId: string, userId: string): Promise<GenericResponseProps> {
+  async unfollowUser(selfId: number, userId: number): Promise<GenericResponseProps> {
     const user = await this.users.findOne({
       where: { id: userId }
     });
@@ -83,7 +83,7 @@ class FollowerService implements IFollowerService {
     }
   }
 
-  async getFollowers(id: string): Promise<GenericResponseProps> {
+  async getFollowers(id: number): Promise<GenericResponseProps> {
     const followers = (await this.users.findOne({ where: { id }, select: ["followers"] }))?.followers;
     if (!followers) return {
       success: false,
@@ -106,8 +106,8 @@ class FollowerService implements IFollowerService {
     }
   }
 
-  async getFollowing(id: string): Promise<GenericResponseProps> {
-    const following = (await this.users.findOne({ where: { id }, select: ["following"] }))?.following;
+  async getFollowing(id: number): Promise<GenericResponseProps> {
+    const following = (await this.users.findOne({ where: { id: id }, select: ["following"] }))?.following;
     if (!following) return {
       success: false,
       message: "Unable to retrieve data at this time"

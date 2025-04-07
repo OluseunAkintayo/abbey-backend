@@ -115,13 +115,13 @@ class AuthService implements IAuthService {
     return { success: false, message: "Unable to decode token" };
   }
 
-  async updateLastLogin(userId: string): Promise<void> {
+  async updateLastLogin(userId: number): Promise<void> {
     await this.users.update(userId, {
       lastLoginDate: new Date()
     });
   }
 
-  private async generateToken({ id, email }: { id: string; email: string }): Promise<GenericResponseProps> {
+  private async generateToken({ id, email }: { id: number; email: string }): Promise<GenericResponseProps> {
     if (this.jwtKey) {
       const token = jsonwebtoken.sign(
         { id, email, exp: Date.parse(this.exp) },

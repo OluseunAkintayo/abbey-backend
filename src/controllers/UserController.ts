@@ -49,7 +49,7 @@ class UserController {
       });
     }
   }
-  
+
   private async updateProfile(req: Request, res: Response) {
     const token: string | undefined = req.headers.authorization?.split(' ')[1];
     if (!token) {
@@ -57,7 +57,7 @@ class UserController {
       return;
     }
     const id = decodeToken(token)?.id
-    if(!id) {
+    if (!id) {
       res.status(401).json({ error: 'Unable to get user profile' });
       return;
     }
@@ -83,12 +83,12 @@ class UserController {
     const token: string | undefined = req.headers.authorization?.split(' ')[1];
     if (!token) return;
 
-    const selfId = decodeToken(token)?.id;
+    const selfId: number = Number(decodeToken(token)?.id);
     if (!selfId) {
       res.status(401).json({ message: "Invalid token", success: false });
       return;
     }
-    const userId: string = req.body.userId;
+    const userId: number = Number(req.body.userId);
 
     if (selfId !== userId) {
       try {
@@ -114,12 +114,12 @@ class UserController {
     const token: string | undefined = req.headers.authorization?.split(' ')[1];
     if (!token) return;
 
-    const selfId = decodeToken(token)?.id;
+    const selfId: number = Number(decodeToken(token)?.id);
     if (!selfId) {
       res.status(401).json({ message: "Invalid token", success: false });
       return;
     }
-    const userId: string = req.body.userId;
+    const userId: number = Number(req.body.userId);
     if (userId !== selfId) {
       try {
         const response = await this.followerService.unfollowUser(selfId, userId);
@@ -144,7 +144,7 @@ class UserController {
     const token: string | undefined = req.headers.authorization?.split(' ')[1];
     if (!token) return;
 
-    const my_id = decodeToken(token)?.id;
+    const my_id: number = Number(decodeToken(token)?.id);
     if (!my_id) {
       res.status(401).json({ message: "Invalid token", success: false });
       return;
@@ -169,8 +169,8 @@ class UserController {
     const token: string | undefined = req.headers.authorization?.split(' ')[1];
     if (!token) return;
 
-    const my_id = decodeToken(token)?.id;
-    if (!my_id) {
+    const my_id: number = Number(decodeToken(token)?.id);
+    if (!(my_id?.toString())) {
       res.status(401).json({ message: "Invalid token", success: false });
       return;
     }

@@ -2,7 +2,6 @@ import { AppDataSource } from "../config/database";
 import { User } from "../entities/User";
 import { decodeToken } from "../lib/decode-token";
 import { GenericResponseProps, IUSerService, UserPofileUpdateProps } from "../lib/types";
-import jsonwebtoken from 'jsonwebtoken';
 
 class UserService implements IUSerService {
   private users = AppDataSource.getRepository(User);
@@ -34,7 +33,7 @@ class UserService implements IUSerService {
   async getUserProfile(token: string): Promise<GenericResponseProps> {
     const id = decodeToken(token)?.id;
     const user = await this.users.findOne({
-      where: { id },
+      where: { id: Number(id) },
       select: ["id", "firstName", "lastName", "email", "isActive", "picture", "bio", "username", "lastLoginDate"]
     });
     if (!user) {
@@ -51,7 +50,7 @@ class UserService implements IUSerService {
   }
 
   async updateProfile(id: string, profile: UserPofileUpdateProps): Promise<GenericResponseProps> {
-    const user = await this.users.findOne({ where: { id } });
+    const user = await this.users.findOne({ where: { id: Number(id) } });
     if (!user) {
       return {
         success: false,

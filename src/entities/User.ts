@@ -3,8 +3,8 @@ import { Follower } from '../lib/types';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  @PrimaryGeneratedColumn('increment')
+  id!: number;
 
   @Column({ length: 100, unique: true, nullable: false })
   email!: string;
