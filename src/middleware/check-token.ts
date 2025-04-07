@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 import { Request, RequestHandler } from 'express';
 import dayjs from 'dayjs';
+import { redis } from '../lib/redis';
 dotenv.config();
 
 export interface RequestExt extends Request {
@@ -23,6 +24,11 @@ export const check: RequestHandler = async (req, res, next) => {
   const authToken = req.headers.authorization;
   if (authToken) {
     const token = authToken.split(' ')[1];
+    const is_invalid = await redis.get(token);
+    if (is_invalid) {
+      res.status(401).json({ success: false, message: "Token invalid" });
+      return;
+    }
     try {
       const decodedToken = jwt.verify(token, jwtKey) as { id: string; email: string; exp: number; iat: number };
 

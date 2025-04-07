@@ -4,6 +4,7 @@ import { GenericResponseProps, IAuthService, UserDtoProps } from "../lib/types";
 import bcrypt from 'bcrypt';
 import jsonwebtoken from 'jsonwebtoken';
 import dayjs from "dayjs";
+import { redis } from "../lib/redis";
 
 class AuthService implements IAuthService {
   private users = AppDataSource.getRepository(User);
@@ -84,9 +85,9 @@ class AuthService implements IAuthService {
         message: "There was an error signing in. Please try again after some time"
       }
     }
-    
+
     await this.updateLastLogin(userObject.id);
-    
+
     const response: GenericResponseProps = {
       data: {
         user: {
@@ -101,13 +102,26 @@ class AuthService implements IAuthService {
     return response;
   }
 
+  async logout(token: string): Promise<GenericResponseProps> {
+    if (this.jwtKey) {
+      const decoded_token = jsonwebtoken.verify(token, this.jwtKey) as { id: string; email: string; exp: number, iat: number };
+      const exp = decoded_token.exp;
+      const remaining_time = exp - new Date().getTime();
+      if (remaining_time > 0) {
+        await redis.set(token, "invalidated", "PX", remaining_time);
+      }
+      return { success: true, message: "User logged out" };
+    }
+    return { success: false, message: "Unable to decode token" };
+  }
+
   async updateLastLogin(userId: string): Promise<void> {
     await this.users.update(userId, {
       lastLoginDate: new Date()
     });
   }
 
-  async generateToken({ id, email }: { id: string; email: string }): Promise<GenericResponseProps> {
+  private async generateToken({ id, email }: { id: string; email: string }): Promise<GenericResponseProps> {
     if (this.jwtKey) {
       const token = jsonwebtoken.sign(
         { id, email, exp: Date.parse(this.exp) },
